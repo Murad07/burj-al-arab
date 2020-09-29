@@ -30,10 +30,23 @@ const Login = () => {
           email: email,
         };
         setLoggedInUser(signInUser);
-        history.replace(from);
+        storeAuthToken();
       })
       .catch(function (error) {
         console.log(error.message);
+      });
+  };
+
+  const storeAuthToken = () => {
+    firebase
+      .auth()
+      .currentUser.getIdToken(/* forceRefresh */ true)
+      .then(function (idToken) {
+        sessionStorage.setItem('token', idToken);
+        history.replace(from);
+      })
+      .catch(function (error) {
+        // Handle error
       });
   };
 
