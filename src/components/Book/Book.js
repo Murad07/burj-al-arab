@@ -17,7 +17,7 @@ const Book = () => {
 
   const [selectedDate, setSelectedDate] = useState({
     checkIn: new Date(),
-    chekOut: new Date(),
+    checkOut: new Date(),
   });
 
   const handleCheckInDate = (date) => {
@@ -32,7 +32,18 @@ const Book = () => {
     setSelectedDate(newDates);
   };
 
-  const handleBooking = () => {};
+  const handleBooking = () => {
+    const newBooking = { ...loggeddInUser, ...selectedDate };
+    fetch('http://localhost:5000/appBooking', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newBooking),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  };
 
   return (
     <div style={{ textAlign: 'center' }}>
@@ -63,7 +74,7 @@ const Book = () => {
             id='date-picker-dialog'
             label='Check Out Date'
             format='dd/MM/yyyy'
-            value={selectedDate.chekOut}
+            value={selectedDate.checkOut}
             onChange={handleCheckOutDate}
             KeyboardButtonProps={{
               'aria-label': 'change date',
@@ -71,7 +82,7 @@ const Book = () => {
           />
         </Grid>
       </MuiPickersUtilsProvider>
-      <Button onClick='handleBooking' variant='contained' color='primary'>
+      <Button onClick={handleBooking} variant='contained' color='primary'>
         Book Now
       </Button>
     </div>
